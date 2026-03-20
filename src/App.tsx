@@ -140,9 +140,9 @@ export default function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [activePicker]);
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+  const [theme, setTheme] = useState<'light' | 'dark' | 'gray'>(() => {
     const saved = localStorage.getItem('taskmaster_theme');
-    return (saved as 'light' | 'dark') || 'light';
+    return (saved as 'light' | 'dark' | 'gray') || 'light';
   });
   const [appTitle, setAppTitle] = useState(() => {
     const saved = localStorage.getItem('taskmaster_title');
@@ -765,7 +765,9 @@ export default function App() {
   return (
     <div 
       className={`min-h-screen transition-colors duration-300 font-sans p-4 md:p-6 ${
-        theme === 'dark' ? 'bg-[#0a0a0a] text-white' : 'bg-[#f5f5f5] text-[#1a1a1a]'
+        theme === 'dark' ? 'bg-[#0a0a0a] text-white' : 
+        theme === 'gray' ? 'bg-[#2a2a2a] text-white' : 
+        'bg-[#f5f5f5] text-[#1a1a1a]'
       }`}
     >
       <div className="max-w-[98%] mx-auto">
@@ -781,7 +783,7 @@ export default function App() {
                 onBlur={() => setIsEditingTitle(false)}
                 onKeyDown={(e) => e.key === 'Enter' && setIsEditingTitle(false)}
                 className={`text-3xl font-bold tracking-tight bg-transparent border-b-2 border-emerald-500 outline-none ${
-                  theme === 'dark' ? 'text-white' : 'text-[#1a1a1a]'
+                  theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-[#1a1a1a]'
                 }`}
               />
             ) : (
@@ -793,7 +795,7 @@ export default function App() {
               </h1>
             )}
             <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg ${
-              theme === 'dark' ? 'bg-emerald-600 text-white shadow-emerald-900/20' : 'bg-black text-white shadow-black/10'
+              theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 text-white shadow-emerald-900/20' : 'bg-black text-white shadow-black/10'
             }`}>
               {format(new Date(), 'yyyy/MM/dd')}
             </div>
@@ -802,7 +804,7 @@ export default function App() {
             <button 
               onClick={() => setIsSettingsOpen(!isSettingsOpen)}
               className={`p-2 rounded-xl transition-all shadow-sm border ${
-                theme === 'dark' 
+                theme === 'dark' || theme === 'gray'
                   ? 'bg-[#1a1a1a] border-white/10 text-gray-400 hover:text-white' 
                   : 'bg-white border-gray-200 text-gray-500 hover:text-black'
               }`}
@@ -814,6 +816,8 @@ export default function App() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl shadow-sm border transition-all text-sm font-medium ${
                 theme === 'dark'
                   ? 'bg-[#1a1a1a] border-white/10 text-white hover:bg-[#252525]'
+                : theme === 'gray'
+                  ? 'bg-[#3a3a3a] border-white/10 text-white hover:bg-[#454545]'
                   : 'bg-white border-gray-200 text-[#1a1a1a] hover:bg-gray-50'
               }`}
             >
@@ -825,6 +829,8 @@ export default function App() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl shadow-sm border transition-all text-sm font-medium ${
                 theme === 'dark'
                   ? 'bg-[#1a1a1a] border-white/10 text-white hover:bg-[#252525]'
+                  : theme === 'gray'
+                  ? 'bg-[#3a3a3a] border-white/10 text-white hover:bg-[#454545]'
                   : 'bg-white border-gray-200 text-[#1a1a1a] hover:bg-gray-50'
               }`}
             >
@@ -834,7 +840,7 @@ export default function App() {
             <button 
               onClick={() => setIsAdding(true)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl shadow-md transition-all text-sm font-medium ${
-                theme === 'dark'
+                theme === 'dark' || theme === 'gray'
                   ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                   : 'bg-[#1a1a1a] hover:bg-[#333] text-white'
               }`}
@@ -853,17 +859,19 @@ export default function App() {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               className={`overflow-hidden mb-6 rounded-2xl border transition-all ${
-                theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-100 shadow-sm'
+                theme === 'dark' ? 'bg-[#111] border-white/10' : 
+                theme === 'gray' ? 'bg-[#333] border-white/10' : 
+                'bg-white border-gray-100 shadow-sm'
               }`}
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className={`text-sm font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Configurações</h3>
+                  <h3 className={`text-sm font-bold uppercase tracking-wider ${theme === 'dark' || theme === 'gray' ? 'text-gray-400' : 'text-gray-500'}`}>Configurações</h3>
                   <button onClick={() => setIsSettingsOpen(false)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4" /></button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <label className={`text-xs font-bold uppercase tracking-tight ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Tema do Aplicativo</label>
+                    <label className={`text-xs font-bold uppercase tracking-tight ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>Tema do Aplicativo</label>
                     <div className="flex gap-2">
                       <button 
                         onClick={() => setTheme('light')}
@@ -875,9 +883,20 @@ export default function App() {
                         Claro
                       </button>
                       <button 
+                        onClick={() => setTheme('gray')}
+                        className={`flex-1 py-3 rounded-xl border-2 transition-all flex items-center justify-center gap-2 font-bold text-sm ${
+                          theme === 'gray' ? 'border-emerald-500 bg-gray-700 text-gray-200' : 'border-transparent bg-gray-200 text-gray-500 hover:bg-gray-300'
+                        }`}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-gray-500 border border-white/20" />
+                        Cinza
+                      </button>
+                      <button 
                         onClick={() => setTheme('dark')}
                         className={`flex-1 py-3 rounded-xl border-2 transition-all flex items-center justify-center gap-2 font-bold text-sm ${
-                          theme === 'dark' ? 'border-emerald-500 bg-emerald-900/20 text-emerald-400' : 'border-transparent bg-[#1a1a1a] text-gray-500 hover:bg-[#222]'
+                          theme === 'dark' ? 'border-emerald-500 bg-emerald-900/20 text-emerald-400' : 
+                          theme === 'gray' ? 'border-emerald-500 bg-emerald-900/10 text-emerald-400' :
+                          'border-transparent bg-[#1a1a1a] text-gray-500 hover:bg-[#222]'
                         }`}
                       >
                         <div className="w-4 h-4 rounded-full bg-black border border-white/20" />
@@ -886,7 +905,7 @@ export default function App() {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <label className={`text-xs font-bold uppercase tracking-tight ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>Título da Lista</label>
+                    <label className={`text-xs font-bold uppercase tracking-tight ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>Título da Lista</label>
                     <div className="flex gap-2">
                       <input 
                         type="text"
@@ -894,7 +913,9 @@ export default function App() {
                         onChange={(e) => setAppTitle(e.target.value)}
                         placeholder="Ex: Minha Agenda"
                         className={`flex-1 px-4 py-3 rounded-xl border transition-all text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 ${
-                          theme === 'dark' ? 'bg-[#1a1a1a] border-white/10 text-white' : 'bg-gray-50 border-gray-200 text-[#1a1a1a]'
+                          theme === 'dark' ? 'bg-[#1a1a1a] border-white/10 text-white' : 
+                          theme === 'gray' ? 'bg-[#3a3a3a] border-white/10 text-white' : 
+                          'bg-gray-50 border-gray-200 text-[#1a1a1a]'
                         }`}
                       />
                     </div>
@@ -911,7 +932,7 @@ export default function App() {
             <button 
               onClick={() => setNotifications([])}
               className={`pointer-events-auto self-end mb-1 px-4 py-2 rounded-xl shadow-lg transition-all text-xs font-bold uppercase tracking-widest flex items-center gap-2 border ${
-                theme === 'dark' 
+                theme === 'dark' || theme === 'gray'
                   ? 'bg-[#1a1a1a] text-white hover:bg-[#252525] border-white/10' 
                   : 'bg-white text-[#1a1a1a] hover:bg-gray-50 border-gray-200'
               }`}
@@ -957,7 +978,7 @@ export default function App() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 className={`w-[98vw] max-w-[1600px] h-[95vh] rounded-3xl shadow-2xl overflow-hidden border flex flex-col ${
-                  theme === 'dark' ? 'bg-[#0a0a0a] border-white/10' : 'bg-white border-gray-200'
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#0a0a0a] border-white/10' : 'bg-white border-gray-200'
                 }`}
               >
                 <div className="p-6 border-b border-white/5 flex items-center justify-between">
@@ -966,17 +987,17 @@ export default function App() {
                       <BarChart2 className="w-6 h-6 text-blue-500" />
                     </div>
                     <div>
-                      <h2 className={`text-xl font-black uppercase tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                      <h2 className={`text-xl font-black uppercase tracking-tight ${theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-gray-900'}`}>
                         Relatório de Atividades
                       </h2>
-                      <p className={`text-xs font-medium ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                      <p className={`text-xs font-medium ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
                         Visão geral das tarefas por data selecionada
                       </p>
                     </div>
                   </div>
                   <button 
                     onClick={() => setShowReport(false)}
-                    className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-500'}`}
+                    className={`p-2 rounded-full transition-colors ${theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-500'}`}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -988,18 +1009,18 @@ export default function App() {
                     <div className="flex-1 flex flex-col gap-6">
                       <div className="flex flex-col gap-4">
                         <div className="flex-1">
-                          <label className={`block text-[10px] font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>
+                          <label className={`block text-[10px] font-black uppercase tracking-widest mb-2 ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-400'}`}>
                             Filtrar por Termos (Relatório)
                           </label>
                           <div className="relative">
-                            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+                            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`} />
                             <input 
                               type="text"
                               placeholder="Ex: Termo 1; Termo 2..."
                               value={reportSearch}
                               onChange={(e) => setReportSearch(e.target.value)}
                               className={`w-full pl-10 pr-4 py-3 rounded-2xl transition-all text-sm outline-none border ${
-                                theme === 'dark' 
+                                theme === 'dark' || theme === 'gray'
                                   ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/30' 
                                   : 'bg-gray-50 border-gray-100 focus:ring-2 focus:ring-blue-500/5'
                               }`}
@@ -1009,7 +1030,7 @@ export default function App() {
 
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className={`block text-[10px] font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>
+                            <label className={`block text-[10px] font-black uppercase tracking-widest mb-2 ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-400'}`}>
                               Data Inicial
                             </label>
                             <input 
@@ -1017,14 +1038,14 @@ export default function App() {
                               value={format(reportStartDate, 'yyyy-MM-dd')}
                               onChange={(e) => setReportStartDate(new Date(e.target.value + 'T12:00:00'))}
                               className={`w-full px-4 py-3 rounded-2xl transition-all outline-none border ${
-                                theme === 'dark' 
+                                theme === 'dark' || theme === 'gray'
                                   ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/30' 
                                   : 'bg-gray-50 border-gray-100 focus:ring-2 focus:ring-blue-500/5'
                               }`}
                             />
                           </div>
                           <div>
-                            <label className={`block text-[10px] font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>
+                            <label className={`block text-[10px] font-black uppercase tracking-widest mb-2 ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-400'}`}>
                               Data Final
                             </label>
                             <input 
@@ -1032,7 +1053,7 @@ export default function App() {
                               value={format(reportEndDate, 'yyyy-MM-dd')}
                               onChange={(e) => setReportEndDate(new Date(e.target.value + 'T12:00:00'))}
                               className={`w-full px-4 py-3 rounded-2xl transition-all outline-none border ${
-                                theme === 'dark' 
+                                theme === 'dark' || theme === 'gray'
                                   ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/30' 
                                   : 'bg-gray-50 border-gray-100 focus:ring-2 focus:ring-blue-500/5'
                               }`}
@@ -1042,9 +1063,9 @@ export default function App() {
                       </div>
 
                       {/* Mini Calendar with Counts */}
-                      <div className={`p-5 rounded-3xl border ${theme === 'dark' ? 'bg-[#1a1a1a] border-white/5' : 'bg-gray-50 border-gray-100'}`}>
+                      <div className={`p-5 rounded-3xl border ${theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5' : 'bg-gray-50 border-gray-100'}`}>
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                          <h3 className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
                             Calendário de Atividades ({format(reportStartDate, 'MMMM yyyy', { locale: ptBR })})
                           </h3>
                           <div className="flex gap-1">
@@ -1054,7 +1075,7 @@ export default function App() {
                                 setReportStartDate(startOfMonth(newDate));
                                 setReportEndDate(startOfMonth(newDate));
                               }}
-                              className={`p-1 rounded-lg hover:bg-black/5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+                              className={`p-1 rounded-lg hover:bg-black/5 ${theme === 'dark' || theme === 'gray' ? 'text-gray-400' : 'text-gray-500'}`}
                             >
                               <ChevronUp className="-rotate-90 w-4 h-4" />
                             </button>
@@ -1064,7 +1085,7 @@ export default function App() {
                                 setReportStartDate(startOfMonth(newDate));
                                 setReportEndDate(startOfMonth(newDate));
                               }}
-                              className={`p-1 rounded-lg hover:bg-black/5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}
+                              className={`p-1 rounded-lg hover:bg-black/5 ${theme === 'dark' || theme === 'gray' ? 'text-gray-400' : 'text-gray-500'}`}
                             >
                               <ChevronUp className="rotate-90 w-4 h-4" />
                             </button>
@@ -1106,8 +1127,8 @@ export default function App() {
                                     !isCurrentMonth ? 'opacity-20 pointer-events-none' : ''
                                   } ${
                                     isSelected 
-                                      ? (theme === 'dark' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'bg-blue-600 text-white shadow-lg shadow-blue-200/50')
-                                      : (theme === 'dark' ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-white text-gray-600')
+                                      ? (theme === 'dark' || theme === 'gray' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'bg-blue-600 text-white shadow-lg shadow-blue-200/50')
+                                      : (theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-white text-gray-600')
                                   }`}
                                 >
                                   <span className="text-[16px] font-bold z-10">{format(day, 'd')}</span>
@@ -1120,7 +1141,7 @@ export default function App() {
                                   )}
                                   {totalDayCount > 0 && (
                                     <span className={`absolute -top-1 -right-1 text-[12px] font-black px-2 py-0.5 rounded-full ${
-                                      isSelected ? 'bg-white text-blue-600' : (theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-blue-600 text-white')
+                                      isSelected ? 'bg-white text-blue-600' : (theme === 'dark' || theme === 'gray' ? 'bg-blue-500 text-white' : 'bg-blue-600 text-white')
                                     }`}>
                                       {totalDayCount}
                                     </span>
@@ -1167,23 +1188,23 @@ export default function App() {
                             bg: 'bg-orange-500/10'
                           }
                         ].map((stat, i) => (
-                          <div key={i} className={`p-4 rounded-2xl border ${theme === 'dark' ? 'bg-[#1a1a1a] border-white/5' : 'bg-gray-50 border-gray-100'}`}>
+                          <div key={i} className={`p-4 rounded-2xl border ${theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5' : 'bg-gray-50 border-gray-100'}`}>
                             <div className={`w-8 h-8 ${stat.bg} rounded-lg flex items-center justify-center mb-2`}>
                               <div className={`w-2 h-2 rounded-full ${stat.color.replace('text', 'bg')}`} />
                             </div>
-                            <div className={`text-2xl font-black ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                            <div className={`text-2xl font-black ${theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-gray-900'}`}>
                               {stat.value}
                             </div>
-                            <div className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>
+                            <div className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-400'}`}>
                               {stat.label}
                             </div>
                           </div>
                         ))}
                       </div>
 
-                      <div className={`p-6 rounded-3xl border flex-1 ${theme === 'dark' ? 'bg-[#1a1a1a] border-white/5' : 'bg-gray-50 border-gray-100'}`}>
+                      <div className={`p-6 rounded-3xl border flex-1 ${theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5' : 'bg-gray-50 border-gray-100'}`}>
                         <div className="flex items-center justify-between mb-6">
-                          <h3 className={`text-xs font-black uppercase tracking-widest ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                          <h3 className={`text-xs font-black uppercase tracking-widest ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
                             {isSameDay(reportStartDate, reportEndDate) 
                               ? `Distribuição de Atividades - ${format(reportStartDate, "dd 'de' MMMM", { locale: ptBR })}`
                               : `Período: ${format(reportStartDate, 'dd/MM/yy')} até ${format(reportEndDate, 'dd/MM/yy')}`
@@ -1215,24 +1236,24 @@ export default function App() {
                           <ResponsiveContainer width="100%" height="100%">
                             {chartType === 'bar' ? (
                               <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#333' : '#ddd'} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' || theme === 'gray' ? '#333' : '#ddd'} />
                                 <XAxis 
                                   dataKey="name" 
                                   axisLine={false} 
                                   tickLine={false} 
-                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' ? '#666' : '#999' }}
+                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' || theme === 'gray' ? '#666' : '#999' }}
                                   dy={10}
                                 />
                                 <YAxis 
                                   axisLine={false} 
                                   tickLine={false} 
-                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' ? '#666' : '#999' }}
+                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' || theme === 'gray' ? '#666' : '#999' }}
                                 />
                                 <Tooltip 
-                                  cursor={{ fill: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)' }}
+                                  cursor={{ fill: theme === 'dark' || theme === 'gray' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)' }}
                                   contentStyle={{ 
-                                    backgroundColor: theme === 'dark' ? '#1a1a1a' : '#fff',
-                                    border: `1px solid ${theme === 'dark' ? '#333' : '#eee'}`,
+                                    backgroundColor: theme === 'dark' || theme === 'gray' ? '#1a1a1a' : '#fff',
+                                    border: `1px solid ${theme === 'dark' || theme === 'gray' ? '#333' : '#eee'}`,
                                     borderRadius: '12px',
                                     fontSize: '12px',
                                     fontWeight: 'bold'
@@ -1245,23 +1266,23 @@ export default function App() {
                               </BarChart>
                             ) : chartType === 'line' ? (
                               <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' ? '#333' : '#ddd'} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme === 'dark' || theme === 'gray' ? '#333' : '#ddd'} />
                                 <XAxis 
                                   dataKey="name" 
                                   axisLine={false} 
                                   tickLine={false} 
-                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' ? '#666' : '#999' }}
+                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' || theme === 'gray' ? '#666' : '#999' }}
                                   dy={10}
                                 />
                                 <YAxis 
                                   axisLine={false} 
                                   tickLine={false} 
-                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' ? '#666' : '#999' }}
+                                  tick={{ fontSize: 10, fontWeight: 800, fill: theme === 'dark' || theme === 'gray' ? '#666' : '#999' }}
                                 />
                                 <Tooltip 
                                   contentStyle={{ 
-                                    backgroundColor: theme === 'dark' ? '#1a1a1a' : '#fff',
-                                    border: `1px solid ${theme === 'dark' ? '#333' : '#eee'}`,
+                                    backgroundColor: theme === 'dark' || theme === 'gray' ? '#1a1a1a' : '#fff',
+                                    border: `1px solid ${theme === 'dark' || theme === 'gray' ? '#333' : '#eee'}`,
                                     borderRadius: '12px',
                                     fontSize: '12px',
                                     fontWeight: 'bold'
@@ -1289,8 +1310,8 @@ export default function App() {
                                 </Pie>
                                 <Tooltip 
                                   contentStyle={{ 
-                                    backgroundColor: theme === 'dark' ? '#1a1a1a' : '#fff',
-                                    border: `1px solid ${theme === 'dark' ? '#333' : '#eee'}`,
+                                    backgroundColor: theme === 'dark' || theme === 'gray' ? '#1a1a1a' : '#fff',
+                                    border: `1px solid ${theme === 'dark' || theme === 'gray' ? '#333' : '#eee'}`,
                                     borderRadius: '12px',
                                     fontSize: '12px',
                                     fontWeight: 'bold'
@@ -1309,7 +1330,7 @@ export default function App() {
                     <button 
                       onClick={() => setShowReport(false)}
                       className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
-                        theme === 'dark' ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'
+                        theme === 'dark' || theme === 'gray' ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'
                       }`}
                     >
                       Fechar Relatório
@@ -1323,17 +1344,19 @@ export default function App() {
 
         {/* Search and Filter Bar */}
         <div className={`p-2.5 rounded-2xl shadow-sm border mb-4 flex flex-col gap-3 transition-all ${
-          theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-100'
+          theme === 'dark' ? 'bg-[#111] border-white/10' : 
+          theme === 'gray' ? 'bg-[#333] border-white/10' : 
+          'bg-white border-gray-100'
         }`}>
           <div className="w-full relative">
-            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`} />
             <input 
               type="text"
               placeholder="Pesquisar termos (separe por ';' para múltiplos termos)..."
               value={keywordSearch}
               onChange={(e) => setKeywordSearch(e.target.value)}
               className={`w-full pl-10 pr-4 py-2.5 rounded-xl transition-all text-sm outline-none border ${
-                theme === 'dark' 
+                theme === 'dark' || theme === 'gray'
                   ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500/30' 
                   : 'bg-gray-50 border-gray-100 focus:ring-2 focus:ring-black/5'
               }`}
@@ -1341,19 +1364,21 @@ export default function App() {
           </div>
           
           <div className={`flex flex-col md:flex-row gap-2.5 items-center justify-between border-t pt-2.5 ${
-            theme === 'dark' ? 'border-white/5' : 'border-gray-50'
+            theme === 'dark' || theme === 'gray' ? 'border-white/5' : 'border-gray-50'
           }`}>
             <div className="flex items-center gap-3 w-full md:w-auto">
               <div className={`flex items-center gap-4 px-3 py-1.5 rounded-xl border transition-all ${
-                theme === 'dark' ? 'bg-[#1a1a1a] border-white/5' : 'bg-gray-50 border-gray-100'
+                theme === 'dark' ? 'bg-[#1a1a1a] border-white/5' : 
+                theme === 'gray' ? 'bg-[#3a3a3a] border-white/5' : 
+                'bg-gray-50 border-gray-100'
               }`}>
-                <div className={`flex items-center gap-2 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>
+                <div className={`flex items-center gap-2 ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-400'}`}>
                   <Filter className="w-3 h-3" />
                   <span className="text-[10px] font-bold uppercase tracking-tight">Exibir:</span>
                 </div>
                 
                 <label className="flex items-center gap-2 cursor-pointer group">
-                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${showPending ? (theme === 'dark' ? 'bg-emerald-600 border-emerald-600' : 'bg-black border-black') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
+                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${showPending ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 border-emerald-600' : 'bg-black border-black') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
                     {showPending && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
                   </div>
                   <input 
@@ -1362,11 +1387,11 @@ export default function App() {
                     checked={showPending} 
                     onChange={(e) => setShowPending(e.target.checked)} 
                   />
-                  <span className={`text-[11px] font-bold transition-colors ${showPending ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : 'text-gray-400'}`}>PENDENTES</span>
+                  <span className={`text-[11px] font-bold transition-colors ${showPending ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : 'text-gray-400'}`}>PENDENTES</span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer group">
-                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${showCompleted ? 'bg-emerald-500 border-emerald-500' : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
+                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${showCompleted ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 border-emerald-600' : 'bg-black border-black') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
                     {showCompleted && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
                   </div>
                   <input 
@@ -1375,7 +1400,7 @@ export default function App() {
                     checked={showCompleted} 
                     onChange={(e) => setShowCompleted(e.target.checked)} 
                   />
-                  <span className={`text-[11px] font-bold transition-colors ${showCompleted ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : 'text-gray-400'}`}>CONCLUÍDAS</span>
+                  <span className={`text-[11px] font-bold transition-colors ${showCompleted ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : 'text-gray-400'}`}>CONCLUÍDAS</span>
                 </label>
               </div>
 
@@ -1394,7 +1419,7 @@ export default function App() {
                   { label: '72h', value: 4320 },
                 ].map((interval) => (
                   <label key={interval.value} className="flex items-center gap-1 cursor-pointer group shrink-0">
-                    <div className={`w-3 h-3 rounded border flex items-center justify-center transition-all ${selectedInterval === interval.value ? (theme === 'dark' ? 'bg-blue-600 border-blue-600' : 'bg-blue-500 border-blue-500') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
+                    <div className={`w-3 h-3 rounded border flex items-center justify-center transition-all ${selectedInterval === interval.value ? (theme === 'dark' || theme === 'gray' ? 'bg-blue-600 border-blue-600' : 'bg-blue-500 border-blue-500') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
                       {selectedInterval === interval.value && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                     </div>
                     <input 
@@ -1403,7 +1428,7 @@ export default function App() {
                       checked={selectedInterval === interval.value} 
                       onChange={() => setSelectedInterval(selectedInterval === interval.value ? null : interval.value)} 
                     />
-                    <span className={`text-[10px] font-bold transition-colors ${selectedInterval === interval.value ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-600') : 'text-gray-400'}`}>{interval.label}</span>
+                    <span className={`text-[10px] font-bold transition-colors ${selectedInterval === interval.value ? (theme === 'dark' || theme === 'gray' ? 'text-blue-400' : 'text-blue-600') : 'text-gray-400'}`}>{interval.label}</span>
                   </label>
                 ))}
               </div>
@@ -1412,7 +1437,7 @@ export default function App() {
 
               <div className="flex items-center gap-3 shrink-0">
                 <label className="flex items-center gap-2 cursor-pointer group">
-                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${isUpdatedFilter ? (theme === 'dark' ? 'bg-orange-600 border-orange-600' : 'bg-orange-500 border-orange-500') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
+                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${isUpdatedFilter ? (theme === 'dark' || theme === 'gray' ? 'bg-orange-600 border-orange-600' : 'bg-orange-500 border-orange-500') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
                     {isUpdatedFilter && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
                   </div>
                   <input 
@@ -1424,11 +1449,11 @@ export default function App() {
                       if (e.target.checked) setIsScheduledFilter(false);
                     }} 
                   />
-                  <span className={`text-[11px] font-bold transition-colors ${isUpdatedFilter ? (theme === 'dark' ? 'text-orange-400' : 'text-orange-600') : 'text-gray-400'}`}>Atualizado a</span>
+                  <span className={`text-[11px] font-bold transition-colors ${isUpdatedFilter ? (theme === 'dark' || theme === 'gray' ? 'text-orange-400' : 'text-orange-600') : 'text-gray-400'}`}>Atualizado a</span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer group">
-                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${isScheduledFilter ? (theme === 'dark' ? 'bg-orange-600 border-orange-600' : 'bg-orange-500 border-orange-500') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
+                  <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center transition-all ${isScheduledFilter ? (theme === 'dark' || theme === 'gray' ? 'bg-orange-600 border-orange-600' : 'bg-orange-500 border-orange-500') : 'bg-white border-gray-300 group-hover:border-gray-400'}`}>
                     {isScheduledFilter && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
                   </div>
                   <input 
@@ -1440,7 +1465,7 @@ export default function App() {
                       if (e.target.checked) setIsUpdatedFilter(false);
                     }} 
                   />
-                  <span className={`text-[11px] font-bold transition-colors ${isScheduledFilter ? (theme === 'dark' ? 'text-orange-400' : 'text-orange-600') : 'text-gray-400'}`}>Programada para próxima</span>
+                  <span className={`text-[11px] font-bold transition-colors ${isScheduledFilter ? (theme === 'dark' || theme === 'gray' ? 'text-orange-400' : 'text-orange-600') : 'text-gray-400'}`}>Programada para próxima</span>
                 </label>
               </div>
 
@@ -1451,7 +1476,7 @@ export default function App() {
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all text-[10px] font-bold uppercase tracking-tight ${
                   selectedTaskIds.size === filteredAndSortedTasks.length && filteredAndSortedTasks.length > 0
                     ? 'bg-emerald-600 border-emerald-600 text-white'
-                    : (theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-gray-400 hover:text-white' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50')
+                    : (theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-gray-400 hover:text-white' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50')
                 }`}
               >
                 {selectedTaskIds.size === filteredAndSortedTasks.length && filteredAndSortedTasks.length > 0 ? <CheckSquare className="w-3 h-3" /> : <Square className="w-3 h-3" />}
@@ -1469,12 +1494,12 @@ export default function App() {
               )}
             </div>
             
-            <div className={`text-[10px] font-medium flex items-center gap-3 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+            <div className={`text-[10px] font-medium flex items-center gap-3 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
               {keywordSearch.trim() !== '' && filteredAndSortedTasks.length >= 2 && (
                 <button 
                   onClick={mergeFilteredTasks}
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-lg transition-all uppercase font-bold tracking-tighter shadow-sm ${
-                    theme === 'dark' ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-emerald-500 text-white hover:bg-emerald-600'
+                    theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 text-white hover:bg-emerald-700' : 'bg-emerald-500 text-white hover:bg-emerald-600'
                   }`}
                 >
                   <Plus className="w-2.5 h-2.5" />
@@ -1484,7 +1509,7 @@ export default function App() {
               <button 
                 onClick={() => setKeywordSearch('')}
                 className={`transition-colors uppercase font-bold tracking-tighter ${
-                  theme === 'dark' ? 'text-emerald-400 hover:text-emerald-300' : 'text-blue-500 hover:text-blue-600'
+                  theme === 'dark' || theme === 'gray' ? 'text-emerald-400 hover:text-emerald-300' : 'text-blue-500 hover:text-blue-600'
                 }`}
               >
                 Limpar Pesquisa
@@ -1508,13 +1533,15 @@ export default function App() {
               className={`w-full pl-5 pr-32 py-4 rounded-2xl shadow-sm transition-all outline-none text-base font-medium border ${
                 theme === 'dark' 
                   ? 'bg-[#111] border-white/10 text-white focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/50' 
+                  : theme === 'gray'
+                  ? 'bg-[#333] border-white/10 text-white focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500/50'
                   : 'bg-white border-gray-200 text-[#1a1a1a] focus:ring-4 focus:ring-black/5 focus:border-black'
               }`}
             />
             <button 
               onClick={addTask}
               className={`absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-2 rounded-xl transition-all text-sm font-bold uppercase tracking-widest ${
-                theme === 'dark'
+                theme === 'dark' || theme === 'gray'
                   ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                   : 'bg-[#1a1a1a] text-white hover:bg-[#333]'
               }`}
@@ -1527,14 +1554,14 @@ export default function App() {
 
         {/* Excel-style Header */}
         <div className={`hidden sm:grid grid-cols-[1fr_auto] gap-4 px-4 py-2 mb-1 text-[11px] font-bold uppercase tracking-[0.15em] border-b transition-all ${
-          theme === 'dark' ? 'text-gray-500 border-white/5' : 'text-gray-400 border-gray-200'
+          theme === 'dark' || theme === 'gray' ? 'text-gray-500 border-white/5' : 'text-gray-400 border-gray-200'
         }`}>
           <div className="flex items-center gap-3">
             <div className="w-5" /> {/* Checkbox spacer */}
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => setIsExpandedAll(!isExpandedAll)}
-                className={`p-1 rounded-md transition-colors ${theme === 'dark' ? 'hover:bg-white/5 text-gray-500 hover:text-white' : 'hover:bg-gray-100 text-gray-400 hover:text-gray-600'}`}
+                className={`p-1 rounded-md transition-colors ${theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5 text-gray-500 hover:text-white' : 'hover:bg-gray-100 text-gray-400 hover:text-gray-600'}`}
                 title={isExpandedAll ? "Recolher tudo" : "Expandir tudo"}
               >
                 {isExpandedAll ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -1542,7 +1569,7 @@ export default function App() {
               <div className="flex flex-col gap-1">
                 <button 
                   onClick={() => toggleSort('name')}
-                  className={`transition-colors flex items-center gap-1 text-[13px] font-bold ${sortBy === 'name' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                  className={`transition-colors flex items-center gap-1 text-[13px] font-bold ${sortBy === 'name' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
                 >
                   Nome {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
                 </button>
@@ -1552,7 +1579,7 @@ export default function App() {
                   value={nameFilter}
                   onChange={(e) => setNameFilter(e.target.value)}
                   className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-32 border transition-all ${
-                    theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                    theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                   }`}
                 />
               </div>
@@ -1562,7 +1589,7 @@ export default function App() {
             <div className="flex flex-col gap-1 items-end">
               <button 
                 onClick={() => toggleSort('date')}
-                className={`transition-colors flex items-center gap-1 w-24 justify-end text-[13px] font-bold h-10 ${sortBy === 'date' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-44 justify-end text-[13px] font-bold h-10 ${sortBy === 'date' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 Iniciada {sortBy === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
               </button>
@@ -1571,15 +1598,15 @@ export default function App() {
                 placeholder="Filtrar..."
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-24 text-right border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-44 text-right border transition-all ${
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
             <div className="flex flex-col gap-1 items-end">
               <button 
                 onClick={() => toggleSort('lastUpdate')}
-                className={`transition-colors flex items-center gap-1 w-24 justify-end text-[13px] font-bold h-10 ${sortBy === 'lastUpdate' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-44 justify-end text-[13px] font-bold h-10 ${sortBy === 'lastUpdate' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 <div className="text-right leading-tight">Últ.<br/>Atualização</div>
                 {sortBy === 'lastUpdate' && (sortOrder === 'asc' ? '↑' : '↓')}
@@ -1589,15 +1616,15 @@ export default function App() {
                 placeholder="Filtrar..."
                 value={lastUpdateFilter}
                 onChange={(e) => setLastUpdateFilter(e.target.value)}
-                className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-24 text-right border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-44 text-right border transition-all ${
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
             <div className="flex flex-col gap-1 items-end">
               <button 
                 onClick={() => toggleSort('daysUA')}
-                className={`transition-colors flex items-center gap-1 w-16 justify-end text-[13px] font-bold h-10 ${sortBy === 'daysUA' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-16 justify-end text-[13px] font-bold h-10 ${sortBy === 'daysUA' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 Dias Ú.A {sortBy === 'daysUA' && (sortOrder === 'asc' ? '↑' : '↓')}
               </button>
@@ -1607,14 +1634,14 @@ export default function App() {
                 value={daysUAFilter}
                 onChange={(e) => setDaysUAFilter(e.target.value)}
                 className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-16 text-right border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
             <div className="flex flex-col gap-1 items-end">
               <button 
                 onClick={() => toggleSort('dueDate')}
-                className={`transition-colors flex items-center gap-1 w-44 justify-end text-[13px] font-bold h-10 ${sortBy === 'dueDate' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-44 justify-end text-[13px] font-bold h-10 ${sortBy === 'dueDate' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 <div className="text-right leading-tight">Próx.<br/>Atualização</div>
                 {sortBy === 'dueDate' && (sortOrder === 'asc' ? '↑' : '↓')}
@@ -1625,14 +1652,14 @@ export default function App() {
                 value={dueDateFilter}
                 onChange={(e) => setDueDateFilter(e.target.value)}
                 className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-44 text-right border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
             <div className="flex flex-col gap-1 items-end">
               <button 
                 onClick={() => toggleSort('daysPA')}
-                className={`transition-colors flex items-center gap-1 w-16 justify-end text-[13px] font-bold h-10 ${sortBy === 'daysPA' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-16 justify-end text-[13px] font-bold h-10 ${sortBy === 'daysPA' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 Dias P.A {sortBy === 'daysPA' && (sortOrder === 'asc' ? '↑' : '↓')}
               </button>
@@ -1642,14 +1669,14 @@ export default function App() {
                 value={daysPAFilter}
                 onChange={(e) => setDaysPAFilter(e.target.value)}
                 className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-16 text-right border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
             <div className="flex flex-col gap-1 items-end">
               <button 
                 onClick={() => toggleSort('recurrentCount')}
-                className={`transition-colors flex items-center gap-1 w-24 justify-end text-[13px] font-bold h-10 ${sortBy === 'recurrentCount' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-24 justify-end text-[13px] font-bold h-10 ${sortBy === 'recurrentCount' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 Recorrência {sortBy === 'recurrentCount' && (sortOrder === 'asc' ? '↑' : '↓')}
               </button>
@@ -1659,14 +1686,14 @@ export default function App() {
                 value={recurrentFilter}
                 onChange={(e) => setRecurrentFilter(e.target.value)}
                 className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-24 text-right border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
             <div className="flex flex-col gap-1 items-center">
               <button 
                 onClick={() => toggleSort('status')}
-                className={`transition-colors flex items-center gap-1 w-20 justify-center text-[13px] font-bold h-10 ${sortBy === 'status' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-20 justify-center text-[13px] font-bold h-10 ${sortBy === 'status' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 Status {sortBy === 'status' && (sortOrder === 'asc' ? '↑' : '↓')}
               </button>
@@ -1676,14 +1703,14 @@ export default function App() {
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-20 text-center border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
             <div className="flex flex-col gap-1 items-center">
               <button 
                 onClick={() => toggleSort('prazo')}
-                className={`transition-colors flex items-center gap-1 w-24 justify-center text-[13px] font-bold h-10 ${sortBy === 'prazo' ? (theme === 'dark' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' ? 'hover:text-white' : 'hover:text-gray-600')}`}
+                className={`transition-colors flex items-center gap-1 w-24 justify-center text-[13px] font-bold h-10 ${sortBy === 'prazo' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-black') : (theme === 'dark' || theme === 'gray' ? 'hover:text-white' : 'hover:text-gray-600')}`}
               >
                 Prazo {sortBy === 'prazo' && (sortOrder === 'asc' ? '↑' : '↓')}
               </button>
@@ -1693,7 +1720,7 @@ export default function App() {
                 value={prazoFilter}
                 onChange={(e) => setPrazoFilter(e.target.value)}
                 className={`rounded px-1.5 py-0.5 text-[11px] font-normal lowercase tracking-normal outline-none w-24 text-center border transition-all ${
-                  theme === 'dark' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
+                  theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-emerald-500/10' : 'bg-white border-gray-100 focus:ring-black/5'
                 }`}
               />
             </div>
@@ -1714,13 +1741,15 @@ export default function App() {
                   onClick={(e) => e.stopPropagation()}
                   className={`group p-2.5 rounded-xl border transition-all grid grid-cols-[auto_1fr_auto] gap-4 items-center cursor-default select-none ${
                     task.status === 'completed' 
-                      ? (theme === 'dark' ? 'bg-emerald-500/10 border-emerald-500/20 shadow-none' : 'bg-emerald-50/50 border-emerald-100 shadow-none')
-                      : (theme === 'dark' ? 'bg-[#111] border-white/5 shadow-sm hover:shadow-md hover:border-white/10' : 'bg-white border-gray-100 shadow-sm hover:shadow-md')
-                  } ${selectedTaskIds.has(task.id) ? (theme === 'dark' ? 'ring-2 ring-emerald-500/50' : 'ring-2 ring-emerald-500/30') : ''}`}
+                      ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-500/10 border-emerald-500/20 shadow-none' : 'bg-emerald-50/50 border-emerald-100 shadow-none')
+                      : (theme === 'dark' ? 'bg-[#111] border-white/5 shadow-sm hover:shadow-md hover:border-white/10' : 
+                         theme === 'gray' ? 'bg-[#222] border-white/5 shadow-sm hover:shadow-md hover:border-white/10' :
+                         'bg-white border-gray-100 shadow-sm hover:shadow-md')
+                  } ${selectedTaskIds.has(task.id) ? (theme === 'dark' || theme === 'gray' ? 'ring-2 ring-emerald-500/50' : 'ring-2 ring-emerald-500/30') : ''}`}
                 >
                   <button 
                     onClick={() => toggleTaskSelection(task.id)}
-                    className={`p-1 rounded transition-colors ${theme === 'dark' ? 'text-gray-600 hover:text-emerald-400' : 'text-gray-300 hover:text-emerald-500'}`}
+                    className={`p-1 rounded transition-colors ${theme === 'dark' || theme === 'gray' ? 'text-gray-600 hover:text-emerald-400' : 'text-gray-300 hover:text-emerald-500'}`}
                   >
                     {selectedTaskIds.has(task.id) ? <CheckSquare className="w-4 h-4 text-emerald-500" /> : <Square className="w-4 h-4" />}
                   </button>
@@ -1731,9 +1760,9 @@ export default function App() {
                       className="flex-shrink-0 transition-colors"
                     >
                       {task.status === 'completed' ? (
-                        <CheckCircle2 className={`w-4.5 h-4.5 ${theme === 'dark' ? 'text-emerald-400 fill-emerald-400/10' : 'text-emerald-600 fill-emerald-100'}`} />
+                        <CheckCircle2 className={`w-4.5 h-4.5 ${theme === 'dark' || theme === 'gray' ? 'text-emerald-400 fill-emerald-400/10' : 'text-emerald-600 fill-emerald-100'}`} />
                       ) : (
-                        <Circle className={`w-4.5 h-4.5 ${theme === 'dark' ? 'text-gray-600 hover:text-gray-400' : 'text-gray-300 hover:text-gray-400'}`} />
+                        <Circle className={`w-4.5 h-4.5 ${theme === 'dark' || theme === 'gray' ? 'text-gray-600 hover:text-gray-400' : 'text-gray-300 hover:text-gray-400'}`} />
                       )}
                     </button>
                     
@@ -1762,7 +1791,8 @@ export default function App() {
                               if (e.key === 'Escape') cancelEdit();
                             }}
                             className={`w-full px-2 py-1 rounded-lg text-[13px] font-medium outline-none transition-all resize-none ${
-                              theme === 'dark' ? 'bg-[#1a1a1a] border-white/10 text-white focus:ring-emerald-500/20' : 'bg-gray-50 border-gray-200 text-gray-900 focus:ring-black/5'
+                              theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/10 text-white focus:ring-emerald-500/20' : 
+                              'bg-gray-50 border-gray-200 text-gray-900 focus:ring-black/5'
                             }`}
                           />
                         </div>
@@ -1805,26 +1835,26 @@ export default function App() {
                               
                               return (
                                 <div key={idx} className="flex items-start gap-2 group/line">
-                                  <button 
-                                    onClick={(e) => { e.stopPropagation(); toggleLineStatus(task.id, idx); }}
-                                    className={`mt-1 w-3.5 h-3.5 rounded-full border flex-shrink-0 transition-colors ${
-                                      isGreen ? 'bg-emerald-500 border-emerald-600' : 
-                                      isRed ? 'bg-red-500 border-red-600' : 
-                                      (theme === 'dark' ? 'bg-white/5 border-white/10 hover:bg-red-500/20' : 'bg-gray-100 border-gray-300 hover:bg-red-200')
-                                    }`}
-                                  />
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); toggleLineStatus(task.id, idx); }}
+                                      className={`mt-1 w-3.5 h-3.5 rounded-full border flex-shrink-0 transition-colors ${
+                                        isGreen ? 'bg-emerald-500 border-emerald-600' : 
+                                        isRed ? 'bg-red-500 border-red-600' : 
+                                        (theme === 'dark' || theme === 'gray' ? 'bg-white/5 border-white/10 hover:bg-red-500/20' : 'bg-gray-100 border-gray-300 hover:bg-red-200')
+                                      }`}
+                                    />
                                   <div className="flex flex-wrap items-baseline gap-x-1.5">
                                     {timestamp && (
-                                      <span className={`text-[9px] font-bold whitespace-nowrap tracking-tighter ${theme === 'dark' ? 'text-gray-800' : 'text-gray-200'}`}>
+                                      <span className={`text-[9px] font-bold whitespace-nowrap tracking-tighter ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
                                         {parts[0]}
                                         {hasDay && <span className="ml-1 opacity-50">{parts[1]}</span>}
                                         <span className="ml-1 opacity-30">{hasDay ? parts[2] : parts[1]}</span>
                                       </span>
                                     )}
                                     <span className={`font-medium text-[15px] ${
-                                      isGreen ? (theme === 'dark' ? 'text-emerald-400' : 'text-emerald-600') : 
-                                      isRed ? (theme === 'dark' ? 'text-red-400' : 'text-red-600') : 
-                                      (theme === 'dark' ? 'text-gray-200' : 'text-gray-900')
+                                      isGreen ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400' : 'text-emerald-600') : 
+                                      isRed ? (theme === 'dark' || theme === 'gray' ? 'text-red-400' : 'text-red-600') : 
+                                      (theme === 'dark' || theme === 'gray' ? 'text-gray-200' : 'text-gray-900')
                                     } ${task.status === 'completed' ? 'opacity-50 line-through' : ''}`}>
                                       {remaining}
                                     </span>
@@ -1833,7 +1863,7 @@ export default function App() {
                               );
                             })}
                             {!isExpandedAll && task.title.split('\n').length > 1 && (
-                              <div className={`text-[11px] italic mt-0.5 ml-6 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                              <div className={`text-[11px] italic mt-0.5 ml-6 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
                                 + {task.title.split('\n').length - 1} linhas ocultas...
                               </div>
                             )}
@@ -1847,12 +1877,12 @@ export default function App() {
                   </div>
 
                   <div className="flex items-center gap-6 pr-4">
-                    <div className={`hidden sm:flex items-center gap-6 text-[13px] font-medium transition-colors ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
-                      <div className={`w-24 text-right ${task.status === 'completed' ? (theme === 'dark' ? 'text-emerald-400/40' : 'text-emerald-400/60') : (theme === 'dark' ? 'text-gray-300 font-bold' : 'text-gray-900 font-bold')}`}>
+                    <div className={`hidden sm:flex items-center gap-6 text-[13px] font-medium transition-colors ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
+                      <div className={`w-44 text-right ${task.status === 'completed' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400/40' : 'text-emerald-400/60') : (theme === 'dark' || theme === 'gray' ? 'text-gray-300 font-bold' : 'text-gray-900 font-bold')}`}>
                         {format(new Date(task.createdAt), 'yy/MM/dd')} <span className="text-[10px] opacity-70 uppercase">{format(new Date(task.createdAt), 'eee', { locale: ptBR }).replace('.', '')}</span>
                         <div className="text-[11px] opacity-50 font-medium">{format(new Date(task.createdAt), 'HH:mm:ss')}</div>
                       </div>
-                      <div className={`w-24 text-right ${task.status === 'completed' ? (theme === 'dark' ? 'text-emerald-400/40' : 'text-emerald-400/60') : (theme === 'dark' ? 'text-gray-300 font-bold' : 'text-gray-900 font-bold')}`}>
+                      <div className={`w-44 text-right ${task.status === 'completed' ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400/40' : 'text-emerald-400/60') : (theme === 'dark' || theme === 'gray' ? 'text-gray-300 font-bold' : 'text-gray-900 font-bold')}`}>
                         {task.lastUpdatedAt ? (
                           <>
                             {format(new Date(task.lastUpdatedAt), 'yy/MM/dd')} <span className="text-[10px] opacity-70 uppercase">{format(new Date(task.lastUpdatedAt), 'eee', { locale: ptBR }).replace('.', '')}</span>
@@ -1867,13 +1897,13 @@ export default function App() {
                           (() => {
                             const diff = differenceInCalendarDays(new Date(), new Date(task.lastUpdatedAt));
                             return (
-                              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}>
+                              <span className={theme === 'dark' || theme === 'gray' ? 'text-gray-300' : 'text-gray-900'}>
                                 {diff}
                               </span>
                             );
                           })()
                         ) : (
-                          <span className={theme === 'dark' ? 'text-gray-800' : 'text-gray-200'}>-</span>
+                          <span className={theme === 'dark' || theme === 'gray' ? 'text-gray-800' : 'text-gray-200'}>-</span>
                         )}
                       </div>
                       <div className="w-44 flex flex-col items-end gap-1">
@@ -1884,8 +1914,8 @@ export default function App() {
                           }}
                           className={`text-[13px] font-bold text-right cursor-pointer px-1 rounded transition-colors ${
                             task.status === 'completed' 
-                              ? (theme === 'dark' ? 'text-emerald-400/40' : 'text-emerald-400/60') 
-                              : (theme === 'dark' ? 'text-emerald-400 hover:bg-emerald-500/10' : 'text-blue-600 hover:bg-blue-50')
+                              ? (theme === 'dark' || theme === 'gray' ? 'text-emerald-400/40' : 'text-emerald-400/60') 
+                              : (theme === 'dark' || theme === 'gray' ? 'text-emerald-400 hover:bg-emerald-500/10' : 'text-blue-600 hover:bg-blue-50')
                           }`}
                         >
                           {editingNextUpdateId === task.id ? (
@@ -1914,7 +1944,7 @@ export default function App() {
                                 if (e.key === 'Escape') setEditingNextUpdateId(null);
                               }}
                               className={`text-[13px] rounded px-1 outline-none w-full border ${
-                                theme === 'dark' ? 'bg-[#1a1a1a] border-emerald-500/30 text-emerald-400 focus:ring-1 focus:ring-emerald-500/50' : 'bg-white border-blue-200 text-blue-600 focus:ring-1 focus:ring-blue-400'
+                                theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-emerald-500/30 text-emerald-400 focus:ring-1 focus:ring-emerald-500/50' : 'bg-white border-blue-200 text-blue-600 focus:ring-1 focus:ring-blue-400'
                               }`}
                             />
                           ) : task.dueDate ? (
@@ -1934,8 +1964,8 @@ export default function App() {
                                 onClick={(e) => { e.stopPropagation(); setNextUpdate(task.id, type); }}
                                 className={`px-1 py-0.5 rounded text-[10px] font-black transition-all border min-w-[24px] ${
                                   task.nextUpdateType === type 
-                                    ? (theme === 'dark' ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm' : 'bg-blue-600 text-white border-blue-600 shadow-sm')
-                                    : (theme === 'dark' ? 'bg-white/5 text-gray-500 border-white/5 hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:text-blue-500')
+                                    ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm' : 'bg-blue-600 text-white border-blue-600 shadow-sm')
+                                    : (theme === 'dark' || theme === 'gray' ? 'bg-white/5 text-gray-500 border-white/5 hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:text-blue-500')
                                 }`}
                               >
                                 {type}
@@ -1949,8 +1979,8 @@ export default function App() {
                                 onClick={(e) => { e.stopPropagation(); setNextUpdate(task.id, type); }}
                                 className={`px-1 py-0.5 rounded text-[10px] font-black transition-all border min-w-[24px] ${
                                   task.nextUpdateType === type 
-                                    ? (theme === 'dark' ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm' : 'bg-blue-600 text-white border-blue-600 shadow-sm')
-                                    : (theme === 'dark' ? 'bg-white/5 text-gray-500 border-white/5 hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:text-blue-500')
+                                    ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm' : 'bg-blue-600 text-white border-blue-600 shadow-sm')
+                                    : (theme === 'dark' || theme === 'gray' ? 'bg-white/5 text-gray-500 border-white/5 hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:text-blue-500')
                                 }`}
                               >
                                 {type}
@@ -1964,8 +1994,8 @@ export default function App() {
                                 onClick={(e) => { e.stopPropagation(); setNextUpdate(task.id, type); }}
                                 className={`px-1 py-0.5 rounded text-[10px] font-black transition-all border min-w-[24px] ${
                                   task.nextUpdateType === type 
-                                    ? (theme === 'dark' ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm' : 'bg-blue-600 text-white border-blue-600 shadow-sm')
-                                    : (theme === 'dark' ? 'bg-white/5 text-gray-500 border-white/5 hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:text-blue-500')
+                                    ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm' : 'bg-blue-600 text-white border-blue-600 shadow-sm')
+                                    : (theme === 'dark' || theme === 'gray' ? 'bg-white/5 text-gray-500 border-white/5 hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-white text-gray-400 border-gray-100 hover:border-blue-200 hover:text-blue-500')
                                 }`}
                               >
                                 {type}
@@ -1979,13 +2009,13 @@ export default function App() {
                           (() => {
                             const diff = differenceInCalendarDays(new Date(task.dueDate), startOfDay(new Date()));
                             return (
-                              <span className={theme === 'dark' ? 'text-gray-300' : 'text-gray-900'}>
+                              <span className={theme === 'dark' || theme === 'gray' ? 'text-gray-300' : 'text-gray-900'}>
                                 {diff}
                               </span>
                             );
                           })()
                         ) : (
-                          <span className={theme === 'dark' ? 'text-gray-800' : 'text-gray-200'}>-</span>
+                          <span className={theme === 'dark' || theme === 'gray' ? 'text-gray-800' : 'text-gray-200'}>-</span>
                         )}
                       </div>
                       <div className="w-24 flex flex-col items-end gap-1 relative">
@@ -1993,7 +2023,7 @@ export default function App() {
                           id={`btn-picker-${task.id}`}
                           onClick={() => setActivePicker(activePicker === task.id ? null : task.id)}
                           className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[13px] font-black uppercase tracking-wider transition-all shadow-sm border ${
-                            theme === 'dark' 
+                            theme === 'dark' || theme === 'gray'
                               ? 'bg-white/5 border-white/10 text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10' 
                               : 'bg-white border-gray-100 text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30'
                           }`}
@@ -2012,45 +2042,45 @@ export default function App() {
                             }}
                             tabIndex={0}
                             className={`absolute top-full right-0 mt-2 z-50 rounded-2xl shadow-2xl p-4 w-72 animate-in fade-in slide-in-from-top-2 border outline-none ${
-                              theme === 'dark' ? 'bg-[#1a1a1a] border-white/10' : 'bg-white border-gray-200'
+                              theme === 'dark' || theme === 'gray' ? 'bg-[#1a1a1a] border-white/10' : 'bg-white border-gray-200'
                             }`}
                             onClick={(e) => e.stopPropagation()}
                           >
                             <div className="flex items-center justify-between mb-4">
                               <div className="flex flex-col">
-                                <span className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>Recorrência</span>
-                                <span className={`text-xs font-bold capitalize ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                <span className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-400'}`}>Recorrência</span>
+                                <span className={`text-xs font-bold capitalize ${theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-gray-900'}`}>
                                   {format(currentMonthView, 'MMMM yyyy')}
                                 </span>
                               </div>
                               <div className="flex items-center gap-1">
                                 <button 
                                   onClick={() => setCurrentMonthView(prev => new Date(prev.getFullYear(), prev.getMonth() - 1))}
-                                  className={`p-1.5 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-gray-100'}`}
+                                  className={`p-1.5 rounded-lg transition-colors ${theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5' : 'hover:bg-gray-100'}`}
                                 >
-                                  <ChevronDown className={`w-3.5 h-3.5 rotate-90 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+                                  <ChevronDown className={`w-3.5 h-3.5 rotate-90 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`} />
                                 </button>
                                 <button 
                                   onClick={() => setCurrentMonthView(new Date())}
-                                  className={`px-2 py-1 text-[8px] font-black uppercase tracking-tighter transition-colors ${theme === 'dark' ? 'text-emerald-400 hover:bg-emerald-500/10' : 'text-blue-500 hover:bg-blue-50'}`}
+                                  className={`px-2 py-1 text-[8px] font-black uppercase tracking-tighter transition-colors ${theme === 'dark' || theme === 'gray' ? 'text-emerald-400 hover:bg-emerald-500/10' : 'text-blue-500 hover:bg-blue-50'}`}
                                 >
                                   Hoje
                                 </button>
                                 <button 
                                   onClick={() => setCurrentMonthView(prev => new Date(prev.getFullYear(), prev.getMonth() + 1))}
-                                  className={`p-1.5 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-gray-100'}`}
+                                  className={`p-1.5 rounded-lg transition-colors ${theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5' : 'hover:bg-gray-100'}`}
                                 >
-                                  <ChevronDown className={`w-3.5 h-3.5 -rotate-90 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+                                  <ChevronDown className={`w-3.5 h-3.5 -rotate-90 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`} />
                                 </button>
-                                <button onClick={() => setActivePicker(null)} className={`p-1.5 rounded-lg ml-1 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-gray-100'}`}>
-                                  <X className={`w-3.5 h-3.5 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} />
+                                <button onClick={() => setActivePicker(null)} className={`p-1.5 rounded-lg ml-1 ${theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5' : 'hover:bg-gray-100'}`}>
+                                  <X className={`w-3.5 h-3.5 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`} />
                                 </button>
                               </div>
                             </div>
                             
                             <div className="grid grid-cols-7 gap-1 mb-2">
                               {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, i) => (
-                                <div key={i} className={`text-center text-[8px] font-black py-1 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-300'}`}>
+                                <div key={i} className={`text-center text-[8px] font-black py-1 ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-300'}`}>
                                   {day}
                                 </div>
                               ))}
@@ -2067,13 +2097,13 @@ export default function App() {
                                     className={`
                                       aspect-square rounded-lg text-[10px] font-bold transition-all flex items-center justify-center
                                       ${!isCurrentMonth 
-                                        ? (theme === 'dark' ? 'text-gray-800' : 'text-gray-200') 
-                                        : (theme === 'dark' ? 'text-gray-400' : 'text-gray-600')}
+                                        ? (theme === 'dark' || theme === 'gray' ? 'text-gray-800' : 'text-gray-200') 
+                                        : (theme === 'dark' || theme === 'gray' ? 'text-gray-400' : 'text-gray-600')}
                                       ${isSelected 
                                         ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' 
-                                        : (theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-gray-100')}
+                                        : (theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5' : 'hover:bg-gray-100')}
                                       ${isToday && !isSelected 
-                                        ? (theme === 'dark' ? 'border border-emerald-500/50 text-emerald-400' : 'border border-blue-200 text-blue-600') 
+                                        ? (theme === 'dark' || theme === 'gray' ? 'border border-emerald-500/50 text-emerald-400' : 'border border-blue-200 text-blue-600') 
                                         : ''}
                                     `}
                                   >
@@ -2083,8 +2113,8 @@ export default function App() {
                               })}
                             </div>
 
-                            <div className={`mt-4 pt-3 border-t flex items-center justify-between ${theme === 'dark' ? 'border-white/5' : 'border-gray-100'}`}>
-                              <span className={`text-[9px] font-bold uppercase ${theme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`}>
+                            <div className={`mt-4 pt-3 border-t flex items-center justify-between ${theme === 'dark' || theme === 'gray' ? 'border-white/5' : 'border-gray-100'}`}>
+                              <span className={`text-[9px] font-bold uppercase ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-400'}`}>
                                 {task.recurrentDates?.length || 0} dias selecionados
                               </span>
                               <button 
@@ -2112,7 +2142,7 @@ export default function App() {
                                 key={date}
                                 onClick={() => toggleRecurrentDate(task.id, date)}
                                 className={`px-1.5 py-0.5 rounded text-[8px] font-black transition-all border ${
-                                  theme === 'dark' 
+                                  theme === 'dark' || theme === 'gray'
                                     ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30' 
                                     : 'bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-red-50 hover:text-red-600 hover:border-red-100'
                                 }`}
@@ -2126,8 +2156,8 @@ export default function App() {
                       <div className="w-20 flex justify-center">
                       <div className={`px-3 py-1.5 rounded-xl text-[12px] font-black uppercase tracking-widest transition-all ${
                         task.status === 'completed' 
-                          ? (theme === 'dark' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 'bg-emerald-100/50 text-emerald-700') 
-                          : (theme === 'dark' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' : 'bg-amber-100 text-amber-700 shadow-sm')
+                          ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 'bg-emerald-100/50 text-emerald-700') 
+                          : (theme === 'dark' || theme === 'gray' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' : 'bg-amber-100 text-amber-700 shadow-sm')
                       }`}>
                         {task.status === 'completed' ? 'Concluída' : 'Pendente'}
                       </div>
@@ -2141,14 +2171,14 @@ export default function App() {
                           const now = currentTime;
                           
                           let status = 'Em tempo';
-                          let colorClass = theme === 'dark' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-emerald-100 text-emerald-700';
+                          let colorClass = theme === 'dark' || theme === 'gray' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-emerald-100 text-emerald-700';
                           
                           if (now > due) {
                             status = 'Atrasado';
-                            colorClass = theme === 'dark' ? 'bg-red-600 text-white shadow-lg shadow-red-900/40 scale-110' : 'bg-red-600 text-white shadow-xl shadow-red-600/30 scale-110';
+                            colorClass = theme === 'dark' || theme === 'gray' ? 'bg-red-600 text-white shadow-lg shadow-red-900/40 scale-110' : 'bg-red-600 text-white shadow-xl shadow-red-600/30 scale-110';
                           } else if (now > fifteenMinsBefore) {
                             status = 'Em breve';
-                            colorClass = theme === 'dark' ? 'bg-orange-500 text-white shadow-lg shadow-orange-900/40 scale-110' : 'bg-orange-500 text-white shadow-xl shadow-orange-500/30 scale-110';
+                            colorClass = theme === 'dark' || theme === 'gray' ? 'bg-orange-500 text-white shadow-lg shadow-orange-900/40 scale-110' : 'bg-orange-500 text-white shadow-xl shadow-orange-500/30 scale-110';
                           }
                           
                           return (
@@ -2158,7 +2188,7 @@ export default function App() {
                           );
                         })()
                       ) : (
-                        <span className={`text-[12px] ${theme === 'dark' ? 'text-gray-800' : 'text-gray-200'}`}>-</span>
+                        <span className={`text-[12px] ${theme === 'dark' || theme === 'gray' ? 'text-gray-800' : 'text-gray-200'}`}>-</span>
                       )}
                     </div>
                   </div>
@@ -2166,7 +2196,7 @@ export default function App() {
                   <button 
                       onClick={() => deleteTask(task.id)}
                       className={`opacity-0 group-hover:opacity-100 p-1.5 rounded-lg transition-all ${
-                        theme === 'dark' ? 'text-gray-600 hover:text-red-400 hover:bg-red-500/10' : 'text-gray-300 hover:text-red-500 hover:bg-red-50'
+                        theme === 'dark' || theme === 'gray' ? 'text-gray-600 hover:text-red-400 hover:bg-red-500/10' : 'text-gray-300 hover:text-red-500 hover:bg-red-50'
                       }`}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -2179,15 +2209,17 @@ export default function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className={`text-center py-20 rounded-3xl border border-dashed transition-all ${
-                  theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'
+                  theme === 'dark' ? 'bg-[#111] border-white/10' : 
+                  theme === 'gray' ? 'bg-[#222] border-white/10' : 
+                  'bg-white border-gray-200'
                 }`}
               >
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                  theme === 'dark' ? 'bg-white/5' : 'bg-gray-50'
+                  theme === 'dark' || theme === 'gray' ? 'bg-white/5' : 'bg-gray-50'
                 }`}>
-                  <Search className={`w-8 h-8 ${theme === 'dark' ? 'text-gray-600' : 'text-gray-300'}`} />
+                  <Search className={`w-8 h-8 ${theme === 'dark' || theme === 'gray' ? 'text-gray-600' : 'text-gray-300'}`} />
                 </div>
-                <h3 className={`text-lg font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Nenhuma tarefa encontrada</h3>
+                <h3 className={`text-lg font-medium ${theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-gray-900'}`}>Nenhuma tarefa encontrada</h3>
                 <p className={`text-sm mt-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>Tente ajustar sua busca ou filtros.</p>
               </motion.div>
             )}
@@ -2204,15 +2236,17 @@ export default function App() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               className={`w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border transition-all ${
-                theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-100'
+                theme === 'dark' ? 'bg-[#111] border-white/10' : 
+                theme === 'gray' ? 'bg-[#222] border-white/10' : 
+                'bg-white border-gray-100'
               }`}
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Nova Tarefa</h2>
+                  <h2 className={`text-xl font-bold ${theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-gray-900'}`}>Nova Tarefa</h2>
                   <button 
                     onClick={() => setIsAdding(false)}
-                    className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-500'}`}
+                    className={`p-2 rounded-full transition-colors ${theme === 'dark' || theme === 'gray' ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-500'}`}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -2220,7 +2254,7 @@ export default function App() {
                 
                 <form onSubmit={addTask} className="space-y-4">
                   <div>
-                    <label className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ml-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                    <label className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ml-1 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
                       Título
                     </label>
                     <textarea 
@@ -2247,12 +2281,14 @@ export default function App() {
                       className={`w-full px-4 py-3 rounded-2xl transition-all outline-none resize-none border ${
                         theme === 'dark' 
                           ? 'bg-[#1a1a1a] border-white/5 text-white focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500/30' 
+                          : theme === 'gray'
+                          ? 'bg-[#3a3a3a] border-white/5 text-white focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500/30'
                           : 'bg-gray-50 border-transparent focus:ring-2 focus:ring-black/5'
                       }`}
                     />
                   </div>
                   <div>
-                    <label className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ml-1 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                    <label className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ml-1 ${theme === 'dark' || theme === 'gray' ? 'text-gray-500' : 'text-gray-400'}`}>
                       Próxima Atualização
                     </label>
                     <div className="flex flex-col gap-2">
@@ -2264,8 +2300,8 @@ export default function App() {
                             onClick={() => setNewNextUpdateType(newNextUpdateType === type ? null : type)}
                             className={`flex-1 px-3 py-2 rounded-xl text-[10px] font-black transition-all border ${
                               newNextUpdateType === type 
-                                ? (theme === 'dark' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-blue-600 text-white border-blue-600 shadow-md')
-                                : (theme === 'dark' ? 'bg-white/5 text-gray-500 border-transparent hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-gray-50 text-gray-400 border-transparent hover:border-blue-200 hover:text-blue-500')
+                                ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-blue-600 text-white border-blue-600 shadow-md')
+                                : (theme === 'dark' || theme === 'gray' ? 'bg-white/5 text-gray-500 border-transparent hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-gray-50 text-gray-400 border-transparent hover:border-blue-200 hover:text-blue-500')
                             }`}
                           >
                             {type}
@@ -2280,8 +2316,8 @@ export default function App() {
                             onClick={() => setNewNextUpdateType(newNextUpdateType === type ? null : type)}
                             className={`flex-1 px-3 py-2 rounded-xl text-[10px] font-black transition-all border ${
                               newNextUpdateType === type 
-                                ? (theme === 'dark' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-blue-600 text-white border-blue-600 shadow-md')
-                                : (theme === 'dark' ? 'bg-white/5 text-gray-500 border-transparent hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-gray-50 text-gray-400 border-transparent hover:border-blue-200 hover:text-blue-500')
+                                ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-blue-600 text-white border-blue-600 shadow-md')
+                                : (theme === 'dark' || theme === 'gray' ? 'bg-white/5 text-gray-500 border-transparent hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-gray-50 text-gray-400 border-transparent hover:border-blue-200 hover:text-blue-500')
                             }`}
                           >
                             {type}
@@ -2296,8 +2332,8 @@ export default function App() {
                             onClick={() => setNewNextUpdateType(newNextUpdateType === type ? null : type)}
                             className={`flex-1 px-3 py-2 rounded-xl text-[10px] font-black transition-all border ${
                               newNextUpdateType === type 
-                                ? (theme === 'dark' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-blue-600 text-white border-blue-600 shadow-md')
-                                : (theme === 'dark' ? 'bg-white/5 text-gray-500 border-transparent hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-gray-50 text-gray-400 border-transparent hover:border-blue-200 hover:text-blue-500')
+                                ? (theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-blue-600 text-white border-blue-600 shadow-md')
+                                : (theme === 'dark' || theme === 'gray' ? 'bg-white/5 text-gray-500 border-transparent hover:border-emerald-500/30 hover:text-emerald-400' : 'bg-gray-50 text-gray-400 border-transparent hover:border-blue-200 hover:text-blue-500')
                             }`}
                           >
                             {type}
@@ -2312,7 +2348,7 @@ export default function App() {
                       type="button"
                       onClick={() => setIsAdding(false)}
                       className={`flex-1 px-4 py-3 rounded-2xl font-semibold transition-all ${
-                        theme === 'dark' ? 'bg-white/5 text-gray-400 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        theme === 'dark' || theme === 'gray' ? 'bg-white/5 text-gray-400 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
                       Cancelar
@@ -2320,7 +2356,7 @@ export default function App() {
                     <button 
                       type="submit"
                       className={`flex-2 px-4 py-3 rounded-2xl font-semibold shadow-lg transition-all ${
-                        theme === 'dark' ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-900/20' : 'bg-[#1a1a1a] text-white hover:bg-[#333] shadow-black/10'
+                        theme === 'dark' || theme === 'gray' ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-900/20' : 'bg-[#1a1a1a] text-white hover:bg-[#333] shadow-black/10'
                       }`}
                     >
                       Criar Tarefa
@@ -2342,29 +2378,29 @@ export default function App() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className={`w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border ${
-                theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-100'
+                theme === 'dark' || theme === 'gray' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-100'
               }`}
             >
               <div className="p-6 text-center">
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 ${
-                  theme === 'dark' ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-500'
+                  theme === 'dark' || theme === 'gray' ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-500'
                 }`}>
                   <AlertTriangle className="w-6 h-6" />
                 </div>
-                <h3 className={`text-lg font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-lg font-bold mb-2 ${theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-gray-900'}`}>
                   Atenção
                 </h3>
-                <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                <p className={`text-sm leading-relaxed ${theme === 'dark' || theme === 'gray' ? 'text-gray-400' : 'text-gray-500'}`}>
                   {alertMessage}
                 </p>
               </div>
               <div className={`p-4 border-t flex justify-center ${
-                theme === 'dark' ? 'border-white/5 bg-white/5' : 'border-gray-50 bg-gray-50/50'
+                theme === 'dark' || theme === 'gray' ? 'border-white/5 bg-white/5' : 'border-gray-50 bg-gray-50/50'
               }`}>
                 <button
                   onClick={() => setAlertMessage(null)}
                   className={`px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
-                    theme === 'dark' 
+                    theme === 'dark' || theme === 'gray' 
                       ? 'bg-white text-black hover:bg-gray-200' 
                       : 'bg-black text-white hover:bg-gray-800'
                   }`}
@@ -2386,29 +2422,29 @@ export default function App() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className={`w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border ${
-                theme === 'dark' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-100'
+                theme === 'dark' || theme === 'gray' ? 'bg-[#111] border-white/10' : 'bg-white border-gray-100'
               }`}
             >
               <div className="p-6 text-center">
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 ${
-                  theme === 'dark' ? 'bg-red-500/10 text-red-400' : 'bg-red-50 text-red-500'
+                  theme === 'dark' || theme === 'gray' ? 'bg-red-500/10 text-red-400' : 'bg-red-50 text-red-500'
                 }`}>
                   <Trash2 className="w-6 h-6" />
                 </div>
-                <h3 className={`text-lg font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-lg font-bold mb-2 ${theme === 'dark' || theme === 'gray' ? 'text-white' : 'text-gray-900'}`}>
                   Confirmar Ação
                 </h3>
-                <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                <p className={`text-sm leading-relaxed ${theme === 'dark' || theme === 'gray' ? 'text-gray-400' : 'text-gray-500'}`}>
                   {confirmConfig.message}
                 </p>
               </div>
               <div className={`p-4 border-t grid grid-cols-2 gap-3 ${
-                theme === 'dark' ? 'border-white/5 bg-white/5' : 'border-gray-50 bg-gray-50/50'
+                theme === 'dark' || theme === 'gray' ? 'border-white/5 bg-white/5' : 'border-gray-50 bg-gray-50/50'
               }`}>
                 <button
                   onClick={() => setConfirmConfig(null)}
                   className={`px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
-                    theme === 'dark' 
+                    theme === 'dark' || theme === 'gray' 
                       ? 'bg-white/5 text-gray-400 hover:bg-white/10' 
                       : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                   }`}
@@ -2429,7 +2465,7 @@ export default function App() {
 
       {/* Stats Footer (Optional) */}
       <div className={`max-w-[98%] mx-auto mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest transition-all ${
-        theme === 'dark' ? 'border-white/10 text-gray-500' : 'border-gray-200 text-gray-400'
+        theme === 'dark' || theme === 'gray' ? 'border-white/10 text-gray-500' : 'border-gray-200 text-gray-400'
       }`}>
         <div className="flex gap-6">
           <span>Total: {tasks.length}</span>
